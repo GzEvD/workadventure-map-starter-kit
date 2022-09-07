@@ -14,7 +14,16 @@ WA.onInit().then(() => {
     WA.room.onEnterLayer('clockZone').subscribe(() => {
         const today = new Date();
         const time = today.getHours() + ":" + today.getMinutes();
-        currentPopup = WA.ui.openPopup("clockPopup","It's " + time,[]);
+        
+        //let request = new Request('https://v2.wttr.in/berlin?format=2');
+        //fetch(request).then((response) => response.blob());
+
+        let wetter = fetch('https://v2.wttr.in/berlin?format=2')
+        .then((response) => response.text())
+        .then((data) => console.log(data));
+
+
+        currentPopup = WA.ui.openPopup("clockPopup","It's " + time + "\n",[]);
     })
 
     WA.room.onLeaveLayer('clockZone').subscribe(closePopUp)
