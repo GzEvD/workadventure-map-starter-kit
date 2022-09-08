@@ -6,6 +6,16 @@ console.log('Script started successfully');
 
 let currentPopup: any = undefined;
 
+var wetter = "No Data!";
+function getWeather() {
+    fetch('https://v2.wttr.in/berlin?format=2')
+    .then((response) => response.text())
+    .then(data => wetter = data)
+    .then((data) => console.log(data));
+    return wetter;
+}
+getWeather();
+
 // Waiting for the API to be ready
 WA.onInit().then(() => {
     console.log('Scripting API ready');
@@ -14,16 +24,7 @@ WA.onInit().then(() => {
     WA.room.onEnterLayer('clockZone').subscribe(() => {
         const today = new Date();
         const time = today.getHours() + ":" + today.getMinutes();
-        
-        //let request = new Request('https://v2.wttr.in/berlin?format=2');
-        //fetch(request).then((response) => response.blob());
-
-        let wetter = fetch('https://v2.wttr.in/berlin?format=2')
-        .then((response) => response.text())
-        .then((data) => console.log(data));
-
-
-        currentPopup = WA.ui.openPopup("clockPopup","It's " + time + "\n",[]);
+        currentPopup = WA.ui.openPopup("clockPopup","It's " + time + "\n" + getWeather(),[]);
     })
 
     WA.room.onLeaveLayer('clockZone').subscribe(closePopUp)
